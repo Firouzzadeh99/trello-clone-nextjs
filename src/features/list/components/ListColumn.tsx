@@ -84,7 +84,7 @@ export function ListColumn({ list }: ListColumnProps) {
     if (t) {
       addCard(list.id, t);
       setNewCardTitle("");
-      setShowAddCardForm(false);
+      addCardInputRef.current?.focus();
     }
   }, [list.id, newCardTitle, addCard]);
 
@@ -187,6 +187,7 @@ export function ListColumn({ list }: ListColumnProps) {
           <CardItem key={card.id} card={card} />
         ))}
 
+      </div>
         {showAddCardForm ? (
           <div
             ref={addCardFormRef}
@@ -200,10 +201,6 @@ export function ListColumn({ list }: ListColumnProps) {
               value={newCardTitle}
               onChange={(e) => setNewCardTitle(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleCreateCard();
-                }
                 if (e.key === "Escape") handleCloseAddCard();
               }}
               aria-label="Card title"
@@ -235,7 +232,6 @@ export function ListColumn({ list }: ListColumnProps) {
             + Add another card
           </button>
         )}
-      </div>
     </section>
   );
 }

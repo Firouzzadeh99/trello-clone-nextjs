@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import { useBoardStore } from "../../../store/boardStore";
-import type { List, Card } from "../../../types/board";
+import { useBoardStore } from "@/store/boardStore";
+import type { List, Card } from "@/types/board";
 
 export interface ListWithCards extends List {
   cards: Card[];

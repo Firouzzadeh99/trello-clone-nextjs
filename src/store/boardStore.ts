@@ -14,6 +14,7 @@ interface BoardState {
   setListTitle: (listId: string, title: string) => void;
   addCard: (listId: string, title: string) => void;
   addList: (title: string) => void;
+  reorderLists: (fromIndex: number, toIndex: number) => void;
 }
 
 const createInitialBoard = (): Board => {
@@ -101,6 +102,15 @@ export const useBoardStore = create<BoardState>()(
           order: state.lists.length,
         };
         set({ lists: [...state.lists, newList] });
+      },
+      reorderLists: (fromIndex, toIndex) => {
+        const state = get();
+        const sorted = [...state.lists].sort((a, b) => a.order - b.order);
+        if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || toIndex >= sorted.length) return;
+        const [removed] = sorted.splice(fromIndex, 1);
+        sorted.splice(toIndex, 0, removed);
+        const nextLists = sorted.map((list, i) => ({ ...list, order: i }));
+        set({ lists: nextLists });
       },
     }),
     {

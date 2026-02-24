@@ -102,3 +102,11 @@
   color: darken($color-list-caption, 15%);
   transition: color 0.3s ease-out;
 }
+
+.board__drag-overlay-list {
+  width: 16rem;
+  flex-shrink: 0;
+  cursor: grabbing;
+  box-shadow: 0 12px 40px rgba(9, 30, 66, 0.25);
+  border-radius: 0.2rem;
+}
