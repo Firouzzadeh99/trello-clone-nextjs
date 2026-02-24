@@ -6,9 +6,8 @@ export default function Home() {
           <div>
             <h1 className="board__title">Demo Board</h1>
           </div>
-        </header>
+        </header> 
         <main className="board__surface">
-          {/* Board layout and lists will be implemented in the next feature. */}
         </main>
       </div>
     </div>
