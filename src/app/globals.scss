@@ -1,0 +1,52 @@
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *;
+
+:root {
+  --bg-app: #{$color-app-bg};
+  --text-primary: #fff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family:  sans-serif;
+  background: $color-app-bg;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.9) transparent;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.6);
+    border-radius: 999px;
+  }
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.board {
+  min-height: 100vh;
+  padding-top: $spacing-4;
+}
+
+.board__surface {
+  padding: 0 $spacing-4 $spacing-4;
+}

@@ -1,0 +1,149 @@
+@use "../../../styles/index" as *;
+
+.card {
+  background: #fff;
+  border-radius: $radius-sm;
+  padding: $spacing-2;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  width: 100%;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.card__title {
+  margin: 0 0 $spacing-2 0;
+  font-size: 0.9rem;
+  color: $color-list-text;
+}
+
+.card__action {
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.2rem;
+  background-color: rgb(223, 225, 230);
+  color: rgb(23, 43, 77);
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+  border: none;
+  margin-left: auto;
+  transition: background-color 0.2s ease-in;
+
+  &:hover {
+    background-color: rgb(200, 205, 215);
+  }
+}
+
+.card-wrapper {
+  margin-bottom: 0.5rem;
+  cursor: grab;
+  max-height: 200px;
+  transition:
+    max-height 0.2s ease,
+    margin-bottom 0.2s ease,
+    opacity 0.15s ease-out;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.card-wrapper--origin {
+  opacity: 0;
+  max-height: 0;
+  margin-bottom: 0;
+}
+
+.card-comments {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.card-comments__empty {
+  padding: 0.5rem;
+  margin: 0;
+  background-color: #f4f5f7;
+  font-size: 0.875rem;
+  color: $color-list-caption;
+}
+
+.card-comments__list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  max-height: 16rem;
+  overflow: auto;
+}
+
+.card-comments__item {
+  padding: $spacing-2;
+  background-color: #f4f5f7;
+  border-radius: $radius-sm;
+}
+
+.card-comments__meta {
+  font-size: 0.75rem;
+  color: $color-list-caption;
+  margin-bottom: 0.25rem;
+}
+
+.card-comments__author {
+  font-weight: 600;
+}
+
+.card-comments__dot {
+  margin: 0 0.25rem;
+}
+
+.card-comments__text {
+  font-size: 0.85rem;
+  color: $color-list-text;
+  white-space: pre-wrap;
+}
+
+.card-comments__form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.card-comments__label {
+  font-size: 0.8rem;
+  color: $color-list-caption;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.card-comments__textarea {
+  width: 100%;
+  min-height: 4rem;
+  resize: vertical;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #091e4221;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.card-comments__submit {
+  align-self: flex-end;
+  padding: 0.5rem 0.9rem;
+  border-radius: 4px;
+  border: none;
+  background-color: $color-action-button;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.card-comments__submit:hover {
+  background-color: darken($color-action-button, 7%);
+  transition: background-color 0.2s ease-in;
+}
+
+.card-comments__submit:disabled {
+  cursor: default;
+  opacity: 0.6;
+}

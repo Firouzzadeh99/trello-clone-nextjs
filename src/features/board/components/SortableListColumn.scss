@@ -1,0 +1,20 @@
+.sortable-list {
+  flex-shrink: 0;
+  cursor: grab;
+  position: relative;
+}
+
+.sortable-list:active {
+  cursor: grabbing;
+}
+
+.sortable-list--dragging {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sortable-list--dragging .list {
+  cursor: grabbing;
+  box-shadow: none;
+}

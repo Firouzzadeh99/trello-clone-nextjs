@@ -1,0 +1,282 @@
+@use "../../../styles/index" as *;
+
+.list {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  cursor: grab;
+  max-height: 83vh;
+  width: 16rem;
+  margin: 0 0.5rem;
+  background-color: #dfe1e6;
+  border-radius: 0.2rem;
+}
+
+.list__header {
+  padding: 0.5rem 0.7rem 0 0.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list__title {
+  width: 100%;
+  margin: 0;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+  padding: 0.3rem 0.5rem;
+  font-weight: 700;
+  color: $color-list-title;
+  cursor: grab;
+}
+
+.list__title--input {
+  font-size: 1rem;
+  font-weight: 700;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  color: $color-list-title;
+}
+
+.list__menu-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.list__menu-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: $color-list-text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list__menu-icon {
+  width: 1rem;
+  height: 1.5rem;
+}
+
+.list__body {
+  min-height: 3rem;
+  position: relative;
+  padding: 0.5rem;
+  flex-grow: 1;
+  overflow: auto;
+  scrollbar-width:  thin !important;
+  -ms-overflow-style: none !important;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+  display: flex;
+  flex-direction: column;
+  transition:
+    min-height 0.22s ease,
+    padding-top 0.22s ease,
+    padding-bottom 0.22s ease;
+
+  &--no-scroll {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  &--highlight {
+    // فضای بیشتر برای لیست مقصد، مستقل از ارتفاع کارت‌ها
+    min-height: 8rem;
+    padding-top: 1.25rem;
+    padding-bottom: 2.5rem;
+  }
+}
+
+.list__add-card {
+  text-align: left;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: rgb(107, 119, 140);
+  transition: 0.2s ease-in;
+  cursor: pointer;
+}
+
+.list__add-card:hover {
+  background-color: rgba(9, 30, 66, 0.13);
+  color: #172b4d;
+}
+
+.list__popover {
+  position: absolute;
+  top: 2rem;
+  left: calc(100% - 2rem);
+  width: 17rem;
+
+  background-color: rgb(244, 245, 247);
+  border-radius: 0.2rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0.125rem 0.125rem 0.5rem;
+  z-index: 10;
+}
+@media (max-width: 768px) {
+  .list__popover {
+    left:  -230px;
+  }
+}
+.list__popover-header {
+ @include flex-row($align: center, $justify: space-between);
+  padding: 0.4rem;
+  background: #f4f5f7;
+  border-bottom: 1px solid rgba(9, 30, 66, 0.13);
+  border-radius: 0.2rem 0.2rem 0 0;
+}
+.list__popover-button--disabled,
+.list__popover-back {
+  border: none;
+  background: transparent;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list__popover-back {
+  cursor: pointer;
+  color: $color-list-caption;
+}
+
+.list__popover-back:hover {
+  color: darken($color-list-caption, 10%);
+}
+.list__popover-title {
+  color: $color-list-caption;
+  font-size: 0.875rem;
+}
+
+.list__popover-close {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: $color-list-caption;
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
+
+.list__popover-close:hover {
+  color: darken($color-list-caption, 15%);
+  transition: color 0.3s ease-out;
+}
+
+.list__popover-body {
+  padding: 0.25rem 0;
+}
+
+.list__popover-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #172b4d;
+  cursor: pointer;
+}
+
+.list__popover-item:hover {
+  background: $color-list-popover-hover;
+  color: $color-white;
+  transition: background-color 0.3s ease-out;
+}
+
+.list__popover-confirm {
+  padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+}
+
+.list__popover-confirm-text {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: $color-list-text;
+}
+
+.list__popover-confirm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.list__popover-confirm-button--danger {
+  background: $color-action-button-delete;
+  color: #fff;
+}
+
+.list__popover-confirm-button--danger:hover {
+  background: darken(#cf513d, 7%);
+  transition: background-color 0.2s ease-in;
+}
+
+.list__add-card-form {
+  padding: 0.5rem;
+}
+
+.list__add-card-input {
+  width: 100%;
+  border: 1px solid #091e4221;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  height: 4rem;
+  margin-bottom: 0.5rem;
+  line-height: normal;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.list__add-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.list__add-card-submit {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  background: $color-action-button;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.list__add-card-submit:hover {
+  background: darken($color-action-button, 7%);
+  transition: background-color 0.2s ease-in;
+}
+
+.list__add-card-cancel {
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: #6b778c;
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
