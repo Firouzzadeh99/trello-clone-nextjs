@@ -30,30 +30,7 @@ body {
 
 .board {
   min-height: 100vh;
-  padding-top: $spacing-4; // 16px
-}
-
-.board__header {
-  @include flex-row($gap: $spacing-3, $align: center, $justify: space-between);
-  padding-left: $spacing-4;
-  padding-right: $spacing-4;
-  margin-bottom: $spacing-4;
-  color: var(--text-primary);
-}
-
-.board__title {
-  margin: 0;
-  padding: $spacing-2;
-  font-size: 1.4rem;
-  color: #fff;
-  font-weight: 700;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.board__subtitle {
-  margin: 0;
+  padding-top: $spacing-4;
 }
 
 .board__surface {

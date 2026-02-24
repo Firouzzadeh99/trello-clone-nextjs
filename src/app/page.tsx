@@ -1,14 +1,11 @@
+import { BoardHeader } from "../features/board/components/BoardHeader";
+
 export default function Home() {
   return (
     <div className="app">
       <div className="board">
-        <header className="board__header">
-          <div>
-            <h1 className="board__title">Demo Board</h1>
-          </div>
-        </header> 
-        <main className="board__surface">
-        </main>
+        <BoardHeader />
+        <main className="board__surface"></main>
       </div>
     </div>
   );
