@@ -5,6 +5,7 @@
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
+  cursor: grab;
   max-height: 83vh;
   width: 16rem;
   margin: 0 0.5rem;
@@ -27,8 +28,21 @@
   padding: 0.3rem 0.5rem;
   font-weight: 700;
   color: $color-list-title;
+  cursor: grab;
+}
 
- 
+.list__title--input {
+  font-size: 1rem;
+  font-weight: 700;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  color: $color-list-title;
+}
+
+.list__menu-wrap {
+  position: relative;
+  flex-shrink: 0;
 }
 
 .list__menu-button {
@@ -44,7 +58,7 @@
 
 .list__menu-icon {
   width: 1rem;
-  height: 1rem;
+  height: 1.5rem;
 }
 
 .list__body {
@@ -73,4 +87,120 @@
 .list__add-card:hover {
   background-color: rgba(9, 30, 66, 0.13);
   color: #172b4d;
+}
+
+.list__popover {
+  position: absolute;
+  top: 2rem;
+  left: calc(100% - 2rem);
+  width: 17rem;
+
+  background-color: rgb(244, 245, 247);
+  border-radius: 0.2rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0.125rem 0.125rem 0.5rem;
+  z-index: 10;
+}
+
+.list__popover-header {
+ @include flex-row($align: center, $justify: space-between);
+  padding: 0.4rem;
+  background: #f4f5f7;
+  border-bottom: 1px solid rgba(9, 30, 66, 0.13);
+  border-radius: 0.2rem 0.2rem 0 0;
+}
+.list__popover-button--disabled {
+  border: none;
+  background: transparent;
+  cursor: not-allowed;
+}
+.list__popover-title {
+  color: $color-list-caption;
+  font-size: 0.875rem;
+}
+
+.list__popover-close {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: $color-list-caption;
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
+
+.list__popover-close:hover {
+  color: darken($color-list-caption, 15%);
+  transition: color 0.3s ease-out;
+}
+
+.list__popover-body {
+  padding: 0.25rem 0;
+}
+
+.list__popover-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #172b4d;
+  cursor: pointer;
+}
+
+.list__popover-item:hover {
+  background: $color-list-popover-hover;
+  color: $color-white;
+  transition: background-color 0.3s ease-out;
+}
+
+.list__add-card-form {
+  padding: 0.5rem 0;
+}
+
+.list__add-card-input {
+  width: 100%;
+  border: 1px solid #091e4221;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  height: 4rem;
+  margin-bottom: 0.5rem;
+  line-height: normal;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.list__add-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.list__add-card-submit {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  background: $color-action-button;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.list__add-card-submit:hover {
+  background: darken($color-action-button, 7%);
+  transition: background-color 0.2s ease-in;
+}
+
+.list__add-card-cancel {
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: #6b778c;
+  cursor: pointer;
+  padding: 0 0.25rem;
 }

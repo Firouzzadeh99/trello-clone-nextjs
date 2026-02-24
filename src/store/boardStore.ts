@@ -11,6 +11,9 @@ interface BoardState {
   lists: List[];
   cards: Card[];
   setTitle: (title: string) => void;
+  setListTitle: (listId: string, title: string) => void;
+  addCard: (listId: string, title: string) => void;
+  addList: (title: string) => void;
 }
 
 const createInitialBoard = (): Board => {
@@ -67,6 +70,38 @@ export const useBoardStore = create<BoardState>()(
             updatedAt: new Date().toISOString(),
           },
         })),
+      setListTitle: (listId, title) =>
+        set((state) => ({
+          lists: state.lists.map((l) =>
+            l.id === listId ? { ...l, title: title.trim() || l.title } : l,
+          ),
+        })),
+      addCard: (listId, title) => {
+        const trimmed = title.trim();
+        if (!trimmed) return;
+        const state = get();
+        const listCards = state.cards.filter((c) => c.listId === listId);
+        const nextOrder = listCards.length;
+        const newCard: Card = {
+          id: `card-${Date.now()}`,
+          listId,
+          title: trimmed,
+          order: nextOrder,
+          commentCount: 0,
+        };
+        set({ cards: [...state.cards, newCard] });
+      },
+      addList: (title) => {
+        const trimmed = title.trim();
+        if (!trimmed) return;
+        const state = get();
+        const newList: List = {
+          id: `list-${Date.now()}`,
+          title: trimmed,
+          order: state.lists.length,
+        };
+        set({ lists: [...state.lists, newList] });
+      },
     }),
     {
       name: BOARD_STORAGE_KEY,
