@@ -1,0 +1,76 @@
+@use "../../../styles/index" as *;
+
+.list {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  max-height: 83vh;
+  width: 16rem;
+  margin: 0 0.5rem;
+  background-color: #dfe1e6;
+  border-radius: 0.2rem;
+}
+
+.list__header {
+  padding: 0.5rem 0.7rem 0 0.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list__title {
+  width: 100%;
+  margin: 0;
+  font-size: 1rem;
+  padding: 0.3rem 0.5rem;
+  font-weight: 700;
+  color: $color-list-title;
+
+ 
+}
+
+.list__menu-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: $color-list-text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list__menu-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.list__body {
+  min-height: 2rem;
+  position: relative;
+  padding: 0.5rem;
+  flex-grow: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.list__add-card {
+  text-align: left;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: rgb(107, 119, 140);
+  transition: 0.2s ease-in;
+  cursor: pointer;
+}
+
+.list__add-card:hover {
+  background-color: rgba(9, 30, 66, 0.13);
+  color: #172b4d;
+}

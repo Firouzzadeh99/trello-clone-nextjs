@@ -1,0 +1,34 @@
+@use "../../../styles/index" as *;
+
+.board__wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-grow: 1;
+  flex-shrink: 0;
+  max-width: 100vw;
+  padding: 0 $spacing-4 $spacing-4;
+  overflow: auto;
+}
+
+.board__lists {
+  @include flex-row($gap: $spacing-3, $align: flex-start, $justify: flex-start);
+}
+
+.board__add-list {
+  height: 38px;
+  width: 16rem;
+  margin-left: $spacing-2;
+  @include flex-row($align: center);
+  border-radius: $radius-sm;
+  border: none;
+  background: rgba(0, 0, 0, 0.13);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+}
+
