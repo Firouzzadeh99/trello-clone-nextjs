@@ -18,6 +18,8 @@ interface BoardState {
   reorderLists: (fromIndex: number, toIndex: number) => void;
   moveCard: (cardId: string, targetListId: string, targetIndex: number) => void;
   addComment: (cardId: string, text: string) => void;
+  deleteList: (listId: string) => void;
+  deleteAllCardsInList: (listId: string) => void;
 }
 
 const createInitialBoard = (): Board => {
@@ -176,13 +178,50 @@ export const useBoardStore = create<BoardState>()(
           cards: nextCards,
         });
       },
+      deleteList: (listId) => {
+        const state = get();
+        const remainingLists = state.lists
+          .filter((l) => l.id !== listId)
+          .sort((a, b) => a.order - b.order)
+          .map((l, index) => ({ ...l, order: index }));
+
+        const cardsToDelete = state.cards.filter((c) => c.listId === listId);
+        const remainingCards = state.cards.filter((c) => c.listId !== listId);
+
+        const deleteIds = new Set(cardsToDelete.map((c) => c.id));
+        const remainingCommentsEntries = Object.entries(state.comments).filter(
+          ([cardId]) => !deleteIds.has(cardId),
+        );
+        const remainingComments = Object.fromEntries(remainingCommentsEntries);
+
+        set({
+          lists: remainingLists,
+          cards: remainingCards,
+          comments: remainingComments,
+        });
+      },
+      deleteAllCardsInList: (listId) => {
+        const state = get();
+        const cardsToDelete = state.cards.filter((c) => c.listId === listId);
+        const remainingCards = state.cards.filter((c) => c.listId !== listId);
+
+        const deleteIds = new Set(cardsToDelete.map((c) => c.id));
+        const remainingCommentsEntries = Object.entries(state.comments).filter(
+          ([cardId]) => !deleteIds.has(cardId),
+        );
+        const remainingComments = Object.fromEntries(remainingCommentsEntries);
+
+        set({
+          cards: remainingCards,
+          comments: remainingComments,
+        });
+      },
     }),
     {
       name: BOARD_STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        board: state.board,
-      }),
+      // Do not persist any runtime state so Demo Board title resets on refresh
+      partialize: () => ({}),
     },
   ),
 );

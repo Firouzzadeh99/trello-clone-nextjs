@@ -14,6 +14,7 @@ import { useDroppable, useDndContext } from "@dnd-kit/core";
 import type { ListWithCards } from "../hooks/useBoardLists";
 import { DraggableCard } from "../../card/components/DraggableCard";
 import { EllipsisIcon } from "@/components/icons/EllipsisIcon";
+import { ChevronLeftIcon } from "@/components/icons/ChevronLeftIcon";
 import { TextInput } from "@/components/ui/TextInput";
 import { useBoardStore } from "@/store/boardStore";
 import { CloseIcon } from "@/components/icons/CloseIcon";
@@ -25,6 +26,8 @@ interface ListColumnProps {
 export function ListColumn({ list }: ListColumnProps) {
   const setListTitle = useBoardStore((s) => s.setListTitle);
   const addCard = useBoardStore((s) => s.addCard);
+  const deleteList = useBoardStore((s) => s.deleteList);
+  const deleteAllCardsInList = useBoardStore((s) => s.deleteAllCardsInList);
 
   const { setNodeRef } = useDroppable({ id: list.id });
   const { active, over } = useDndContext();
@@ -42,6 +45,9 @@ export function ListColumn({ list }: ListColumnProps) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const [popoverMode, setPopoverMode] = useState<
+    "actions" | "deleteList" | "deleteAllCards"
+  >("actions");
 
   const [showAddCardForm, setShowAddCardForm] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
@@ -124,6 +130,7 @@ export function ListColumn({ list }: ListColumnProps) {
       )
         return;
       setPopoverOpen(false);
+      setPopoverMode("actions");
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -139,6 +146,7 @@ export function ListColumn({ list }: ListColumnProps) {
             value={draftTitle}
             onChange={(e) => setDraftTitle(e.target.value)}
             onBlur={handleTitleCommit}
+            placeholder="Enter a list title..."
             onKeyDown={handleTitleKeyDown}
             aria-label="List title"
           />
@@ -168,24 +176,93 @@ export function ListColumn({ list }: ListColumnProps) {
           {popoverOpen && (
             <div className="list__popover">
               <div className="list__popover-header">
-                <button className="list__popover-button--disabled" disabled></button>
-                <span className="list__popover-title">List Actions</span>
+                {popoverMode === "actions" ? (
+                  <button className="list__popover-button--disabled" disabled></button>
+                ) : (
+                  <button
+                    type="button"
+                    className="list__popover-back"
+                    aria-label="Back"
+                    onClick={() => setPopoverMode("actions")}
+                  >
+                    <ChevronLeftIcon width={33} height={33} />
+                  </button>
+                )}
+                <span className="list__popover-title">
+                  {popoverMode === "deleteList"
+                    ? "Delete List"
+                    : popoverMode === "deleteAllCards"
+                      ? "Delete All Cards"
+                      : "List Actions"}
+                </span>
                 <button
                   type="button"
                   className="list__popover-close"
                   aria-label="Close"
-                  onClick={() => setPopoverOpen(false)}
+                  onClick={() => {
+                    setPopoverOpen(false);
+                    setPopoverMode("actions");
+                  }}
                 >
                  <CloseIcon className="list__popover-close-icon" />
                 </button>
               </div>
               <div className="list__popover-body">
-                <button type="button" className="list__popover-item">
-                  Delete List
-                </button>
-                <button type="button" className="list__popover-item">
-                  Delete All Cards
-                </button>
+                {popoverMode === "actions" && (
+                  <>
+                    <button
+                      type="button"
+                      className="list__popover-item"
+                      onClick={() => setPopoverMode("deleteList")}
+                    >
+                      Delete List
+                    </button>
+                    <button
+                      type="button"
+                      className="list__popover-item"
+                      onClick={() => setPopoverMode("deleteAllCards")}
+                    >
+                      Delete All Cards
+                    </button>
+                  </>
+                )}
+                {popoverMode === "deleteList" && (
+                  <div className="list__popover-confirm">
+                    <p className="list__popover-confirm-text">
+                      All actions will be removed from the activity feed and you won&apos;t be
+                      able to re-open the list. There is no undo.
+                    </p>
+                    <button
+                      type="button"
+                      className="list__popover-confirm-button list__popover-confirm-button--danger"
+                      onClick={() => {
+                        deleteList(list.id);
+                        setPopoverOpen(false);
+                        setPopoverMode("actions");
+                      }}
+                    >
+                      Delete list
+                    </button>
+                  </div>
+                )}
+                {popoverMode === "deleteAllCards" && (
+                  <div className="list__popover-confirm">
+                    <p className="list__popover-confirm-text">
+                      This will remove all the cards in this list from the board.
+                    </p>
+                    <button
+                      type="button"
+                      className="list__popover-confirm-button list__popover-confirm-button--danger"
+                      onClick={() => {
+                        deleteAllCardsInList(list.id);
+                        setPopoverOpen(false);
+                        setPopoverMode("actions");
+                      }}
+                    >
+                      Delete all
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -193,9 +270,9 @@ export function ListColumn({ list }: ListColumnProps) {
       </header>
 
       <div
-        className={`list__body${isCardDraggingFromThisList ? " list__body--no-scroll" : ""}${
-          isCardOverThisList ? " list__body--highlight" : ""
-        }`}
+        className={`scrollbar-thin list__body${
+          isCardDraggingFromThisList ? " list__body--no-scroll" : ""
+        }${isCardOverThisList ? " list__body--highlight" : ""}`}
         ref={setNodeRef}
       >
         {list.cards.map((card) => (

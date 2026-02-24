@@ -31,16 +31,30 @@ export function BoardHeader() {
     setIsEditing(true);
   };
 
-  const handleCommit = () => {
+  const handleCommitFromEnter = () => {
     const trimmed = draft.trim();
-    setTitle(trimmed.length ? trimmed : "Untitled Board");
+    if (!trimmed.length) {
+       return;
+    }
+    setTitle(trimmed);
+    setIsEditing(false);
+  };
+
+  const handleCommitFromBlur = () => {
+    const trimmed = draft.trim();
+    if (!trimmed.length) {
+       setDraft(title);
+      setIsEditing(false);
+      return;
+    }
+    setTitle(trimmed);
     setIsEditing(false);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      handleCommit();
+      handleCommitFromEnter();
     }
     if (event.key === "Escape") {
       event.preventDefault();
@@ -58,9 +72,12 @@ export function BoardHeader() {
             className="board__title board__title--input"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            onBlur={handleCommit}
+            onBlur={handleCommitFromBlur}
             onKeyDown={handleKeyDown}
             aria-label="Board title"
+            style={{
+              width: `${Math.max(draft.length + 3, 1)}ch`,
+            }}
           />
         ) : (
           <h1 className="board__title" onClick={handleStartEdit}>

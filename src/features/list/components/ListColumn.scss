@@ -24,6 +24,10 @@
 .list__title {
   width: 100%;
   margin: 0;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 1rem;
   padding: 0.3rem 0.5rem;
   font-weight: 700;
@@ -67,6 +71,11 @@
   padding: 0.5rem;
   flex-grow: 1;
   overflow: auto;
+  scrollbar-width:  thin !important;
+  -ms-overflow-style: none !important;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
   display: flex;
   flex-direction: column;
   transition:
@@ -116,7 +125,11 @@
   box-shadow: rgba(0, 0, 0, 0.3) 0.125rem 0.125rem 0.5rem;
   z-index: 10;
 }
-
+@media (max-width: 768px) {
+  .list__popover {
+    left:  -230px;
+  }
+}
 .list__popover-header {
  @include flex-row($align: center, $justify: space-between);
   padding: 0.4rem;
@@ -124,10 +137,24 @@
   border-bottom: 1px solid rgba(9, 30, 66, 0.13);
   border-radius: 0.2rem 0.2rem 0 0;
 }
-.list__popover-button--disabled {
+.list__popover-button--disabled,
+.list__popover-back {
   border: none;
   background: transparent;
-  cursor: not-allowed;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list__popover-back {
+  cursor: pointer;
+  color: $color-list-caption;
+}
+
+.list__popover-back:hover {
+  color: darken($color-list-caption, 10%);
 }
 .list__popover-title {
   color: $color-list-caption;
@@ -170,6 +197,39 @@
   background: $color-list-popover-hover;
   color: $color-white;
   transition: background-color 0.3s ease-out;
+}
+
+.list__popover-confirm {
+  padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+}
+
+.list__popover-confirm-text {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: $color-list-text;
+}
+
+.list__popover-confirm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 4px;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.list__popover-confirm-button--danger {
+  background: $color-action-button-delete;
+  color: #fff;
+}
+
+.list__popover-confirm-button--danger:hover {
+  background: darken(#cf513d, 7%);
+  transition: background-color 0.2s ease-in;
 }
 
 .list__add-card-form {
