@@ -110,3 +110,11 @@
   box-shadow: 0 12px 40px rgba(9, 30, 66, 0.25);
   border-radius: 0.2rem;
 }
+
+.board__drag-overlay-card {
+  min-width: 14rem;
+  max-width: 16rem;
+  cursor: grabbing;
+  box-shadow: 0 12px 40px rgba(9, 30, 66, 0.25);
+  border-radius: $radius-sm;
+}

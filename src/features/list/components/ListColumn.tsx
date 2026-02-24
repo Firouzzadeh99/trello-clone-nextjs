@@ -10,8 +10,9 @@ import {
   MouseEvent,
 } from "react";
 import "./ListColumn.scss";
+import { useDroppable, useDndContext } from "@dnd-kit/core";
 import type { ListWithCards } from "../hooks/useBoardLists";
-import { CardItem } from "./CardItem";
+import { DraggableCard } from "../../card/components/DraggableCard";
 import { EllipsisIcon } from "@/components/icons/EllipsisIcon";
 import { TextInput } from "@/components/ui/TextInput";
 import { useBoardStore } from "@/store/boardStore";
@@ -24,6 +25,15 @@ interface ListColumnProps {
 export function ListColumn({ list }: ListColumnProps) {
   const setListTitle = useBoardStore((s) => s.setListTitle);
   const addCard = useBoardStore((s) => s.addCard);
+
+  const { setNodeRef } = useDroppable({ id: list.id });
+  const { active, over } = useDndContext();
+  const isCardDraggingFromThisList =
+    active?.id != null && typeof active.id === "string" && list.cards.some((c) => c.id === active.id);
+  const isCardOverThisList =
+    active?.id != null &&
+    typeof active.id === "string" &&
+    over?.id === list.id;
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [draftTitle, setDraftTitle] = useState(list.title);
@@ -182,9 +192,14 @@ export function ListColumn({ list }: ListColumnProps) {
         </div>
       </header>
 
-      <div className="list__body">
+      <div
+        className={`list__body${isCardDraggingFromThisList ? " list__body--no-scroll" : ""}${
+          isCardOverThisList ? " list__body--highlight" : ""
+        }`}
+        ref={setNodeRef}
+      >
         {list.cards.map((card) => (
-          <CardItem key={card.id} card={card} />
+          <DraggableCard key={card.id} card={card} />
         ))}
 
       </div>

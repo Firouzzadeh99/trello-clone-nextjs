@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { Board, List, Card } from "../types/board";
+import type { Board, List, Card, CardComment, CardId } from "../types/board";
 
 const BOARD_STORAGE_KEY = "trello-demo-board";
 
@@ -10,11 +10,14 @@ interface BoardState {
   board: Board;
   lists: List[];
   cards: Card[];
+  comments: Record<CardId, CardComment[]>;
   setTitle: (title: string) => void;
   setListTitle: (listId: string, title: string) => void;
   addCard: (listId: string, title: string) => void;
   addList: (title: string) => void;
   reorderLists: (fromIndex: number, toIndex: number) => void;
+  moveCard: (cardId: string, targetListId: string, targetIndex: number) => void;
+  addComment: (cardId: string, text: string) => void;
 }
 
 const createInitialBoard = (): Board => {
@@ -63,6 +66,7 @@ export const useBoardStore = create<BoardState>()(
       board: createInitialBoard(),
       lists: createInitialLists(),
       cards: createInitialCards(),
+      comments: {},
       setTitle: (title) =>
         set((state) => ({
           board: {
@@ -111,6 +115,66 @@ export const useBoardStore = create<BoardState>()(
         sorted.splice(toIndex, 0, removed);
         const nextLists = sorted.map((list, i) => ({ ...list, order: i }));
         set({ lists: nextLists });
+      },
+      moveCard: (cardId, targetListId, targetIndex) => {
+        const state = get();
+        const card = state.cards.find((c) => c.id === cardId);
+        if (!card) return;
+        const cardsWithout = state.cards.filter((c) => c.id !== cardId);
+        const isSameList = card.listId === targetListId;
+
+        if (isSameList) {
+          const listCards = cardsWithout
+            .filter((c) => c.listId === targetListId)
+            .sort((a, b) => a.order - b.order);
+          const inserted = [...listCards];
+          inserted.splice(targetIndex, 0, { ...card, listId: targetListId, order: targetIndex });
+          const renumbered = inserted.map((c, i) => ({ ...c, order: i }));
+          const others = cardsWithout.filter((c) => c.listId !== targetListId);
+          set({ cards: [...renumbered, ...others] });
+          return;
+        }
+
+        const sourceListCards = cardsWithout
+          .filter((c) => c.listId === card.listId)
+          .sort((a, b) => a.order - b.order);
+        const targetListCards = cardsWithout
+          .filter((c) => c.listId === targetListId)
+          .sort((a, b) => a.order - b.order);
+        const sourceRenumbered = sourceListCards.map((c, i) => ({ ...c, order: i }));
+        const inserted = [...targetListCards];
+        inserted.splice(targetIndex, 0, { ...card, listId: targetListId, order: targetIndex });
+        const targetRenumbered = inserted.map((c, i) => ({ ...c, order: i }));
+        const others = cardsWithout.filter(
+          (c) => c.listId !== card.listId && c.listId !== targetListId,
+        );
+        set({ cards: [...sourceRenumbered, ...targetRenumbered, ...others] });
+      },
+      addComment: (cardId, text) => {
+        const trimmed = text.trim();
+        if (!trimmed) return;
+        const state = get();
+        const existing = state.comments[cardId] ?? [];
+        const now = new Date().toISOString();
+        const newComment: CardComment = {
+          id: `comment-${Date.now()}`,
+          cardId,
+          text: trimmed,
+          createdAt: now,
+          author: "You",
+        };
+        const nextComments = [...existing, newComment];
+        const nextCommentsByCard: Record<CardId, CardComment[]> = {
+          ...state.comments,
+          [cardId]: nextComments,
+        };
+        const nextCards = state.cards.map((card) =>
+          card.id === cardId ? { ...card, commentCount: nextComments.length } : card,
+        );
+        set({
+          comments: nextCommentsByCard,
+          cards: nextCards,
+        });
       },
     }),
     {

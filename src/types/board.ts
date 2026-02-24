@@ -1,6 +1,7 @@
 export type BoardId = string;
 export type ListId = string;
 export type CardId = string;
+export type CardCommentId = string;
 
 export interface Board {
   id: BoardId;
@@ -21,5 +22,13 @@ export interface Card {
   title: string;
   order: number;
   commentCount: number;
+}
+
+export interface CardComment {
+  id: CardCommentId;
+  cardId: CardId;
+  text: string;
+  createdAt: string;
+  author: string;
 }
 

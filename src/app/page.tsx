@@ -1,3 +1,5 @@
+"use client";
+
 import { BoardContent } from "@/features/board/components/BoardContent";
 import { BoardHeader } from "@/features/board/components/BoardHeader";
 
